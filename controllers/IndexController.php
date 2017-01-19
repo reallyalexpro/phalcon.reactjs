@@ -24,7 +24,7 @@ class IndexController extends ControllerBase
 
         $paginator = new Paginator([
             "builder" => $builder,
-            "limit"=> 1,
+            "limit"=> 5,
             "page" => $page
         ]);
 

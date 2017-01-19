@@ -2,7 +2,6 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\View;
-use Phalcon\Mvc\Dispatcher;
 
 class ControllerBase extends Controller
 {
@@ -71,7 +70,7 @@ class ControllerBase extends Controller
         $react[] = $reactSource;
         $react[] = $babelSource;
         $v8->input = $jsxSource;
-        $react[] = "var result = Babel.transform(PHP.input, {presets: ['react']}).code; result;";
+        $react[] = "var result = Babel.transform(PHP.input, {presets: ['react', 'es2015']}).code; result;";
         $react[] = ';';
         $concatenated = implode(";\n", $react);
         return $v8->executeString($concatenated);
@@ -107,8 +106,9 @@ class ControllerBase extends Controller
                 if (is_file($scriptJS)) {
                     $this->assets->addJs($urlJS);
                 } else {
-                    $this->footer->addInlineJs($scriptJSX, null, ['type' => 'text/babel']);
-                        //->addFilter(new Phalcon\Assets\Filters\Jsmin());
+                    $this->footer
+                        ->addInlineJs($scriptJSX, null, ['type' => 'text/babel'])
+                        ->addFilter(new Phalcon\Assets\Filters\Jsmin());
                     $this->assets->addJs($babel_url_ext);
                 }
                 break;
@@ -118,7 +118,7 @@ class ControllerBase extends Controller
 
     public function endReact($str) {
         $this->afterFooter
-            ->addInlineJs($script, null, ['type' => 'text/javascript'])
+            ->addInlineJs($str, null, ['type' => 'text/javascript'])
             ->addFilter(new Phalcon\Assets\Filters\Jsmin());
     }
 }
