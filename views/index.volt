@@ -75,7 +75,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(255,255,255,1);
+                background: rgba(255,255,255,.7);
             }
             .wait i {
                 position: absolute;
@@ -98,6 +98,7 @@
         {{ assets.outputJs() }}
         
         {{ assets.outputInlineJs("footer") }}
+        {{ assets.outputInlineJs("after-footer") }}
 
     </body>
 </html>

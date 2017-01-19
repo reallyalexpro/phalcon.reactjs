@@ -6,14 +6,23 @@ use Phalcon\Mvc\Dispatcher;
 
 class ControllerBase extends Controller
 {
+    private $footer, $afterFooter, $react_source, $babel_source;
+
     protected function initialize()
     {
         $this->tag->prependTitle('Phalcon.ReactJs');
+        $this->footer = $this->assets->collection("footer");
+        $this->afterFooter = $this->assets->collection("after-footer");
     }
 
     protected function getPath()
     {
         return $this->dispatcher->getControllerName() . '/' . $this->dispatcher->getActionName();
+    }
+
+    public function hasJs() {
+        $scriptJS = __DIR__ . '/../public/js/react/' . $this->getPath() . '.js';
+        return file_exists($scriptJS);
     }
 
     protected function forward($uri)
@@ -39,10 +48,19 @@ class ControllerBase extends Controller
 
     public function prepareReact()
     {
-        $this->assets
-            ->addJs('//cdn.jsdelivr.net/g/react@15.4.2(react.min.js+react-dom.min.js+react-dom-server.min.js)')
-            ->addJs('//cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.7/react-bootstrap.min.js')
-            ->addJs('/js/init.react-bootstrap.js');
+        $this->react_source = file_get_contents(__DIR__ . '/../public/js/react-full.js');
+        $this->babel_source = file_get_contents(__DIR__ . '/../public/js/babel.min.js');
+
+        if ($this->config->mode == "development") {
+            $this->assets
+                ->addJs('/js/react-full.js')
+                ->addJs('/js/react-bootstrap.min.js');
+        } else {
+            $this->assets
+                ->addJs('//cdn.jsdelivr.net/g/react@15.4.2(react.min.js+react-dom.min.js+react-dom-server.min.js)')
+                ->addJs('//cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.7/react-bootstrap.min.js');
+        }
+        $this->assets->addJs('/js/init.react-bootstrap.js');
         return $this;
     }
 
@@ -61,9 +79,8 @@ class ControllerBase extends Controller
 
     public function insertReact()
     {
-        $react_source = file_get_contents(__DIR__ . '/../public/js/react-full.js');
-        $babel_source = file_get_contents(__DIR__ . '/../public/js/babel.min.js');
-        $babel_url = '/js/babel.min.js';
+        $babel_url_int = '/js/babel.min.js';
+        $babel_url_ext = 'https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js';
 
         $scriptJSX = file_get_contents(__DIR__ . '/../views/' . $this->getPath() . '.jsx');
         $scriptJS = __DIR__ . '/../public/js/react/' . $this->getPath() . '.js';
@@ -72,17 +89,17 @@ class ControllerBase extends Controller
         switch ($this->config->mode) {
             case 'development':
                 if (class_exists("V8Js")) {
-                    $script = $this->transpile($react_source, $babel_source, $scriptJSX);
+                    $script = $this->transpile($this->react_source, $this->babel_source, $scriptJSX);
                     if (!is_dir(dirname($scriptJS))) {
-                        mkdir(dirname($scriptJS) . '/', 0777, TRUE);
+                        mkdir(dirname($scriptJS) . '/', 0777, true);
                     }
                     file_put_contents($scriptJS, $script);
                     $this->assets->addJs($urlJS);
                 } else {
-                    $this->assets->collection("footer")
+                    $this->footer
                         ->addInlineJs($scriptJSX, null, ['type' => 'text/babel'])
                         ->addFilter(new Phalcon\Assets\Filters\Jsmin());
-                    $this->assets->addJs($babel_url);
+                    $this->assets->addJs($babel_url_int);
                 }
                 break;
             case 'production':
@@ -90,13 +107,18 @@ class ControllerBase extends Controller
                 if (is_file($scriptJS)) {
                     $this->assets->addJs($urlJS);
                 } else {
-                    $this->assets->collection("footer")
-                        ->addInlineJs($scriptJSX, null, ['type' => 'text/babel'])
-                        ->addFilter(new Phalcon\Assets\Filters\Jsmin());
-                    $this->assets->addJs($babel_url);
+                    $this->footer->addInlineJs($scriptJSX, null, ['type' => 'text/babel']);
+                        //->addFilter(new Phalcon\Assets\Filters\Jsmin());
+                    $this->assets->addJs($babel_url_ext);
                 }
                 break;
         }
         return $this;
+    }
+
+    public function endReact($str) {
+        $this->afterFooter
+            ->addInlineJs($script, null, ['type' => 'text/javascript'])
+            ->addFilter(new Phalcon\Assets\Filters\Jsmin());
     }
 }

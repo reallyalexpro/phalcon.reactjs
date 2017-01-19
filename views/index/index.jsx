@@ -1,3 +1,4 @@
+
 class Spinner extends React.Component {
     render() {
         return (
@@ -84,10 +85,11 @@ class TableAdvanced extends React.Component {
                 ellipsis
                 boundaryLinks
                 items={this.state.total}
-                maxButtons={5}
+                maxButtons={3}
                 activePage={this.state.page}
                 onSelect={this.handleSelect} />
           </div>
       )
   }
 }
+ReactDOM.render(<TableAdvanced url="/index/getusers/"/>, document.getElementById("table"));

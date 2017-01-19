@@ -1,3 +1,4 @@
+
 class Spinner extends React.Component {
     render() {
         return React.createElement(
@@ -106,9 +107,10 @@ class TableAdvanced extends React.Component {
                 ellipsis: true,
                 boundaryLinks: true,
                 items: this.state.total,
-                maxButtons: 5,
+                maxButtons: 3,
                 activePage: this.state.page,
                 onSelect: this.handleSelect })
         );
     }
 }
+ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table"));

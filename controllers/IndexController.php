@@ -14,13 +14,6 @@ class IndexController extends ControllerBase
     public function indexAction()
     {
         $this->prepareReact()->insertReact();
-
-        $this->assets->collection("footer")
-            ->addInlineJs(';
-                    var mountNode = document.getElementById("table");
-                    const table = React.createElement(TableAdvanced, {url: "/index/getusers/"}, null);
-                    ReactDOM.render(table, mountNode);
-            ');
     }
 
     public function getUsersAction($page) {
@@ -31,7 +24,7 @@ class IndexController extends ControllerBase
 
         $paginator = new Paginator([
             "builder" => $builder,
-            "limit"=> 3,
+            "limit"=> 1,
             "page" => $page
         ]);
 
