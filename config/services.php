@@ -19,7 +19,7 @@ $loader->registerDirs([
 ])->register();
 
 $loader->registerClasses([
-	"ReactJS" => __DIR__ . '/../library/ReactJS.php',
+	//"ReactJS" => __DIR__ . '/../library/ReactJS.php',
 ]);
 
 $loader->register();
@@ -71,4 +71,14 @@ $di->set('db', function() use ($config) {
         'charset' => 'utf8'
     ]);
     return $db;
+});
+
+$di->setShared('react', function() {
+    $react = new ReactJS();
+    $react->setup(
+        file_get_contents(__DIR__ . '/../public/js/react-full.js'),
+        file_get_contents(__DIR__ . '/../public/js/babel.min.js')
+    );
+
+    return $react;
 });

@@ -1,5 +1,3 @@
-let mountNode = document.getElementById("page");
-
 const page = (
     <Grid>
 
@@ -31,5 +29,3 @@ const page = (
 
     </Grid>
 );
-
-ReactDOM.render(page, mountNode);

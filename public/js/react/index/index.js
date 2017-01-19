@@ -1,5 +1,3 @@
-let mountNode = document.getElementById("page");
-
 class Spinner extends React.Component {
     render() {
         return React.createElement(
@@ -47,7 +45,7 @@ class TableAdvanced extends React.Component {
         this.setState({
             loading: true
         });
-        this.serverRequest = $.get("/index/getusers/" + page, function (users) {
+        this.serverRequest = $.get(this.props.url + page, function (users) {
             this.setState({
                 users: users.items,
                 total: users.total_pages,
@@ -74,7 +72,7 @@ class TableAdvanced extends React.Component {
             null,
             React.createElement(
                 Table,
-                { responsive: true },
+                { responsive: true, className: "dataTable" },
                 React.createElement(
                     "thead",
                     null,
@@ -97,9 +95,9 @@ class TableAdvanced extends React.Component {
                     "tbody",
                     null,
                     rows
-                )
+                ),
+                spinner
             ),
-            spinner,
             React.createElement(Pagination, {
                 prev: true,
                 next: true,
@@ -114,71 +112,3 @@ class TableAdvanced extends React.Component {
         );
     }
 }
-
-class Page extends React.Component {
-    render() {
-        return React.createElement(
-            Grid,
-            null,
-            React.createElement(
-                Navbar,
-                { className: "menu", collapseOnSelect: true },
-                React.createElement(
-                    NavbarHeader,
-                    null,
-                    React.createElement(NavbarToggle, null),
-                    React.createElement("div", { className: "clearfix" })
-                ),
-                React.createElement(
-                    NavbarCollapse,
-                    null,
-                    React.createElement(
-                        Nav,
-                        null,
-                        React.createElement(
-                            NavDropdown,
-                            { eventKey: 3, title: "About", id: "basic-nav-dropdown" },
-                            React.createElement(
-                                MenuItem,
-                                { eventKey: 3.1, href: "/about" },
-                                "About"
-                            ),
-                            React.createElement(
-                                MenuItem,
-                                { eventKey: 3.2 },
-                                "Another action"
-                            ),
-                            React.createElement(
-                                MenuItem,
-                                { eventKey: 3.3, disabled: "true" },
-                                "Something else here"
-                            ),
-                            React.createElement(MenuItem, { divider: true }),
-                            React.createElement(
-                                MenuItem,
-                                { eventKey: 3.3 },
-                                "Separated link"
-                            )
-                        ),
-                        React.createElement(
-                            MenuItem,
-                            { eventKey: 2, href: "/products" },
-                            "Products"
-                        )
-                    ),
-                    React.createElement(
-                        Nav,
-                        { pullRight: true },
-                        React.createElement(
-                            MenuItem,
-                            { eventKey: 2, href: "/contacts" },
-                            "Contacts"
-                        )
-                    )
-                )
-            ),
-            React.createElement(TableAdvanced, null)
-        );
-    }
-}
-ReactDOM.render(React.createElement(Page, null), mountNode);

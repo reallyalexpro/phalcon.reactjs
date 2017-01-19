@@ -10,13 +10,17 @@ class IndexController extends ControllerBase
         $this->tag->setTitle(' - Welcome');                
         parent::initialize();
     }
-	
-    /**    
-    * @React
-    */
-    public function indexAction()
-    {        
 
+    public function indexAction()
+    {
+        $this->prepareReact()->insertReact();
+
+        $this->assets->collection("footer")
+            ->addInlineJs(';
+                    var mountNode = document.getElementById("table");
+                    const table = React.createElement(TableAdvanced, {url: "/index/getusers/"}, null);
+                    ReactDOM.render(table, mountNode);
+            ');
     }
 
     public function getUsersAction($page) {

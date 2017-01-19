@@ -1,5 +1,3 @@
-let mountNode = document.getElementById("page");
-
 class Spinner extends React.Component {
     render() {
         return (
@@ -39,7 +37,7 @@ class TableAdvanced extends React.Component {
       this.setState({
          loading: true
       });
-      this.serverRequest = $.get("/index/getusers/" + page, function (users) {
+      this.serverRequest = $.get(this.props.url + page, function (users) {
           this.setState({
               users: users.items,
               total: users.total_pages,
@@ -65,7 +63,7 @@ class TableAdvanced extends React.Component {
 
       return (
           <div>
-            <Table responsive>
+            <Table responsive className="dataTable">
               <thead>
               <tr>
                 <th>#</th>
@@ -75,9 +73,8 @@ class TableAdvanced extends React.Component {
               <tbody>
               {rows}
               </tbody>
+              {spinner}
             </Table>
-
-            {spinner}
 
             <Pagination
                 prev
@@ -94,37 +91,3 @@ class TableAdvanced extends React.Component {
       )
   }
 }
-
-class Page extends React.Component {
-    render() {
-      return (
-        <Grid>
-          <Navbar className="menu" collapseOnSelect>
-            <NavbarHeader>
-              <NavbarToggle />
-              <div className="clearfix"/>
-            </NavbarHeader>
-            <NavbarCollapse>
-              <Nav>
-                <NavDropdown eventKey={3} title="About" id="basic-nav-dropdown">
-                  <MenuItem eventKey={3.1} href="/about">About</MenuItem>
-                  <MenuItem eventKey={3.2}>Another action</MenuItem>
-                  <MenuItem eventKey={3.3} disabled="true">Something else here</MenuItem>
-                  <MenuItem divider />
-                  <MenuItem eventKey={3.3}>Separated link</MenuItem>
-                </NavDropdown>
-                <MenuItem eventKey={2} href="/products">Products</MenuItem>
-              </Nav>
-              <Nav pullRight>
-                <MenuItem eventKey={2} href="/contacts">Contacts</MenuItem>
-              </Nav>
-            </NavbarCollapse>
-          </Navbar>
-
-          <TableAdvanced/>
-
-        </Grid>
-      )
-    }
-}
-ReactDOM.render(<Page/>, mountNode);

@@ -64,6 +64,9 @@
                 margin-right: 0;
                 overflow-x: hidden;
             }
+            .dataTable {
+                position: relative;
+            }
             .wait {
                 z-index: 2000;
                 position: absolute;
@@ -72,40 +75,29 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                /*background: rgba(0,0,0,.25);*/
+                background: rgba(255,255,255,1);
             }
             .wait i {
                 position: absolute;
-                top: 50%;
+                top: 40%;
                 left: 50%;
                 color: gray;
-                font-size: 3em;
+                font-size: 2.3em;
             }
         </style>
     </head>
     <body class="hold-transition skin-black sidebar-mini">
 
-
         <div class="page-header"><h1><div class="container"><div class="row"><div class="col-xs-3"><a href="/"><img src="/img/logo.svg" class="img-responsive" height="150"></a></div><div class="text-center col-xs-9">Site template</div></div></div></h1></div>
-        <div id="page"></div>
-        
+        <div class="container">
+            {{ content() }}
+        </div>
+
         {{ javascript_include('//cdn.jsdelivr.net/g/jquery@2.2.0,bootstrap@3.3.6') }}
-            
-		{#{ javascript_include('//cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js') }#}
-                
-        {#{ javascript_include('//cdn.jsdelivr.net/g/jquery.fileupload@9.9.0(js/vendor/jquery.ui.widget.js+js/jquery.iframe-transport.js+js/jquery.fileupload.js)') }#}
-		
-        {#{ javascript_include('//gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js') }#}
-		
-        {#{ javascript_include('/inc/adminlte/js/app.min.js', false) }}
-        {{ javascript_include('/inc/hideShowPassword/hideShowPassword.min.js', false) }}
-        {{ javascript_include('/js/admin.js', false) }#}
 
         {{ assets.outputJs() }}
         
         {{ assets.outputInlineJs("footer") }}
-        {{ assets.outputJs("react") }}
-        
-				
+
     </body>
 </html>

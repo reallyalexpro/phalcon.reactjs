@@ -1,1 +1,3 @@
-test
+<div id="table">
+
+</div>
