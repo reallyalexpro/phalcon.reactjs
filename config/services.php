@@ -2,10 +2,7 @@
 
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
-use Phalcon\Mvc\Router;
-use Phalcon\Mvc\Router\Group as RouterGroup;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
-use Phalcon\Security;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 
@@ -19,7 +16,7 @@ $loader->registerDirs([
 ])->register();
 
 $loader->registerClasses([
-	//"ReactJS" => __DIR__ . '/../library/ReactJS.php',
+	"ReactJs" => __DIR__ . '/../library/ReactJs.php',
 ]);
 
 $loader->register();
@@ -73,12 +70,8 @@ $di->set('db', function() use ($config) {
     return $db;
 });
 
-$di->setShared('react', function() {
-    $react = new ReactJS();
-    $react->setup(
-        file_get_contents(__DIR__ . '/../public/js/react-full.js'),
-        file_get_contents(__DIR__ . '/../public/js/babel.min.js')
-    );
+$di->setShared('react', function() use ($config) {
+    $react = new \ReactJs($config->mode);
 
     return $react;
 });

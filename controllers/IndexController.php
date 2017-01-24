@@ -13,7 +13,7 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
-        $this->prepareReact()->insertReact();
+        $this->react->prepare($this->assets)->insertJs(__DIR__ . '/../views/' . $this->getPath() . '.jsx');
     }
 
     public function getUsersAction($page) {

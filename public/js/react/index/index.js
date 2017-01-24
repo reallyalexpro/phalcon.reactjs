@@ -128,6 +128,17 @@ var TableAdvanced = function (_React$Component3) {
                 spinner = React.createElement(Spinner, null);
             }
 
+            var popover = React.createElement(
+                Popover,
+                { id: "modal-popover", title: "popover" },
+                "very popover. such engagement"
+            );
+            var tooltip = React.createElement(
+                Tooltip,
+                { id: "modal-tooltip" },
+                "wow."
+            );
+
             return React.createElement(
                 "div",
                 null,
@@ -204,6 +215,46 @@ var TableAdvanced = function (_React$Component3) {
                             "p",
                             null,
                             "Duis mollis, est non commodo luctus, nisi erat porttitor ligula."
+                        ),
+                        React.createElement(
+                            "h4",
+                            null,
+                            "Popover in a modal"
+                        ),
+                        React.createElement(
+                            "p",
+                            null,
+                            "there is a ",
+                            React.createElement(
+                                OverlayTrigger,
+                                { overlay: popover },
+                                React.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "popover"
+                                )
+                            ),
+                            " here"
+                        ),
+                        React.createElement(
+                            "h4",
+                            null,
+                            "Tooltips in a modal"
+                        ),
+                        React.createElement(
+                            "p",
+                            null,
+                            "there is a ",
+                            React.createElement(
+                                OverlayTrigger,
+                                { overlay: tooltip },
+                                React.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "tooltip"
+                                )
+                            ),
+                            " here"
                         ),
                         React.createElement("hr", null),
                         React.createElement(
@@ -332,6 +383,5 @@ var form = React.createElement(
         )
     )
 );
-
 ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table"));
 ReactDOM.render(form, document.getElementById("form"));

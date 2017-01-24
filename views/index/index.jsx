@@ -71,6 +71,17 @@ class TableAdvanced extends React.Component {
             spinner = <Spinner />;
         }
 
+        const popover = (
+            <Popover id="modal-popover" title="popover">
+                very popover. such engagement
+            </Popover>
+        );
+        const tooltip = (
+            <Tooltip id="modal-tooltip">
+                wow.
+            </Tooltip>
+        );
+
         return (
             <div>
                 <Table responsive className="dataTable">
@@ -114,6 +125,12 @@ class TableAdvanced extends React.Component {
                     <ModalBody>
                         <h4>Text in a modal</h4>
                         <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+
+                        <h4>Popover in a modal</h4>
+                        <p>there is a <OverlayTrigger overlay={popover}><a href="#">popover</a></OverlayTrigger> here</p>
+
+                        <h4>Tooltips in a modal</h4>
+                        <p>there is a <OverlayTrigger overlay={tooltip}><a href="#">tooltip</a></OverlayTrigger> here</p>
 
                         <hr />
 
@@ -172,6 +189,5 @@ const form = (
         </FormGroup>
     </Form>
 );
-
 ReactDOM.render(<TableAdvanced url="/index/getusers/"/>, document.getElementById("table"));
 ReactDOM.render(form, document.getElementById("form"));

@@ -1,7 +1,5 @@
 {
     "require": {
-        "talyssonoc/php-babel-transpiler": "^0.1.0",
-        "guzzlehttp/guzzle": "^6.2",
-        "phalcon/devtools": "~3.0.3"
+
     }
 }

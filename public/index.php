@@ -6,7 +6,8 @@ error_reporting(E_ALL);
 
 try {    
 	define('VENDOR_PATH', realpath('..') . '/' . 'vendor');
-	require_once VENDOR_PATH . '/autoload.php';
+
+	//require_once VENDOR_PATH . '/autoload.php';
 
     /**
      * Load application services

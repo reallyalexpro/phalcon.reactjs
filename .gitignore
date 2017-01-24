@@ -25,3 +25,4 @@ public/inc
 public/files
 *.log
 /nbproject/private/
+Nginx-1.10_vhost.conf
