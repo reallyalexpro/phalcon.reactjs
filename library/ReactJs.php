@@ -8,7 +8,8 @@
 
 class ReactJs
 {
-    private $reactSource, $babelSource, $config, $mode, $v8js, $assets;
+    private $reactSource, $babelSource, $mode, $v8js, $assets;
+    public $config;
 
     function __construct($mode = 'development') {
         $this->mode = $mode;
@@ -16,13 +17,21 @@ class ReactJs
         $this->v8js = class_exists("V8Js");
     }
 
-    private function loadFile($path) {
+    public function loadFile($path) {
         return file_get_contents($path);
     }
 
-    private function loadSources() {
+    private function loadReactSource() {
         $this->reactSource = $this->loadFile($this->config->react->path);
+    }
+
+    private function loadBabelSource() {
         $this->babelSource = $this->loadFile($this->config->babel->path);
+    }
+
+    private function loadSources() {
+        $this->loadReactSource();
+        $this->loadBabelSource();
     }
 
     private function scriptUrl($path) {
@@ -45,7 +54,7 @@ class ReactJs
         file_put_contents($path, $content);
     }
 
-    public function prepare(\Phalcon\Assets\Manager $assets) {
+    public function prepareJs(\Phalcon\Assets\Manager $assets) {
         $this->assets = $assets;
 
         foreach($this->config->setup[$this->mode] as $url) {
@@ -54,7 +63,7 @@ class ReactJs
         return $this;
     }
 
-    public function insertJs($scriptJSX) {
+    public function getJs($scriptJSX) {
         $scriptJS = $this->scriptPath($scriptJSX);
         $urlJS = $this->scriptUrl($scriptJSX);
 
@@ -91,6 +100,12 @@ class ReactJs
         return $this;
     }
 
+    public function endJs($str) {
+        $this->assets->collection("after-footer")
+            ->addInlineJs($str, null, ['type' => 'text/javascript'])
+            ->addFilter(new Phalcon\Assets\Filters\Jsmin());
+    }
+
     public function transpile($jsxSource) {
         $v8 = new \V8Js();
         $react = [];
@@ -101,5 +116,21 @@ class ReactJs
         $react[] = ';';
         $concatenated = implode(";\n", $react);
         return $v8->executeString($concatenated);
+    }
+
+    public function getMarkup($scriptJSX, $component, $data = null, $sources = "") {
+        $v8 = new \V8Js();
+        $react = [];
+        $react[] = "var console = {warn: function(){}, error: print};";
+        $react[] = "var global = global || this, self = self || this, window = window || this;";
+        $react[] = $this->reactSource;
+        $react[] = "var React = global.React, ReactDOM = global.ReactDOM, ReactDOMServer = global.ReactDOMServer;";
+        $react[] = $sources;
+        $react[] = $this->transpile($this->loadFile($scriptJSX));
+        $react[] = sprintf("var result = ReactDOMServer.renderToString(React.createElement(%s, %s)); result", $component, json_encode($data));
+        $react[] = ';';
+        $concatenated = implode(";\n", $react);
+        return $v8->executeString($concatenated);
+        //return $concatenated;
     }
 }

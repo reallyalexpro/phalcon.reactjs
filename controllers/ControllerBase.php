@@ -11,6 +11,7 @@ class ControllerBase extends Controller
     {
         $this->tag->prependTitle('Phalcon.ReactJs');
         $this->assets->collection("footer");
+        $this->assets->collection("after-footer");
     }
 
     protected function getPath()

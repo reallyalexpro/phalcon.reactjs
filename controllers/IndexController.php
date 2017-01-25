@@ -7,24 +7,45 @@ class IndexController extends ControllerBase
 {
     public function initialize()
     {
-        $this->tag->setTitle(' - Welcome');                
+        $this->tag->setTitle(' - Welcome');
         parent::initialize();
     }
 
     public function indexAction()
     {
-        $this->react->prepare($this->assets)->insertJs(__DIR__ . '/../views/' . $this->getPath() . '.jsx');
+        $this->react
+            ->prepareJs($this->assets)
+            ->getJs(__DIR__ . '/../views/' . $this->getPath() . '.jsx')
+            ->endJs('
+                setTimeout(function() {                
+                    ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table"));                    
+                }, 1);                        
+            ');
+
+        $sources = [];
+        foreach ($this->react->config->reactBootstrap as $path) {
+            $sources[] = $this->react->loadFile($path);
+        }
+        $concatenated = implode(";\n", $sources);
+
+        $this->view->content =
+            $this->react->getMarkup(
+                __DIR__ . '/../views/' . $this->getPath() . '.jsx',
+                'Form2',
+                null,
+                $concatenated
+            );
     }
 
-    public function getUsersAction($page) {
-
+    public function getUsersAction($page)
+    {
         $builder = $this->modelsManager->createBuilder()
             ->from(['u' => 'Users'])
             ->orderBy('u.created desc');
 
         $paginator = new Paginator([
             "builder" => $builder,
-            "limit"=> 5,
+            "limit"=> 4,
             "page" => $page
         ]);
 

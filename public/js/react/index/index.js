@@ -383,5 +383,26 @@ var form = React.createElement(
         )
     )
 );
-ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table"));
-ReactDOM.render(form, document.getElementById("form"));
+
+var Form2 = function (_React$Component4) {
+    _inherits(Form2, _React$Component4);
+
+    function Form2() {
+        _classCallCheck(this, Form2);
+
+        return _possibleConstructorReturn(this, (Form2.__proto__ || Object.getPrototypeOf(Form2)).apply(this, arguments));
+    }
+
+    _createClass(Form2, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                form
+            );
+        }
+    }]);
+
+    return Form2;
+}(React.Component);

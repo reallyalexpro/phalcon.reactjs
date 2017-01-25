@@ -189,5 +189,13 @@ const form = (
         </FormGroup>
     </Form>
 );
-ReactDOM.render(<TableAdvanced url="/index/getusers/"/>, document.getElementById("table"));
-ReactDOM.render(form, document.getElementById("form"));
+
+class Form2 extends React.Component {
+    render() {
+        return (
+            <div>
+                {form}
+            </div>
+        )
+    }
+}

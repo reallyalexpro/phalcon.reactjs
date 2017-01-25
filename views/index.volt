@@ -98,5 +98,6 @@
         {{ assets.outputJs() }}
         
         {{ assets.outputInlineJs("footer") }}
+        {{ assets.outputInlineJs("after-footer") }}
     </body>
 </html>

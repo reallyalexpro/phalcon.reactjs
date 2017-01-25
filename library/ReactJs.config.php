@@ -24,5 +24,9 @@ return new \Phalcon\Config([
     'target' => [
         'path' => __DIR__ . '/../public/js/react/',
         'url' => '/js/react/'
+    ],
+    'reactBootstrap' => [
+        'path' => __DIR__ . '/../public/js/react-bootstrap.min.js',
+        'init' => __DIR__ . '/../public/js/init.react-bootstrap.js'
     ]
 ]);

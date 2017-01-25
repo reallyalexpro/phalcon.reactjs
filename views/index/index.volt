@@ -7,3 +7,5 @@
 <div id="form">
 
 </div>
+
+{{ content }}

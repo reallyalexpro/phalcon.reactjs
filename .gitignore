@@ -1,4 +1,5 @@
 app/config/config.ini.dev
+*_vhost.conf
 cache
 .DS_Store*
 ehthumbs.db
@@ -25,4 +26,3 @@ public/inc
 public/files
 *.log
 /nbproject/private/
-Nginx-1.10_vhost.conf
