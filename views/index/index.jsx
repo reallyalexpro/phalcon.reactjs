@@ -19,141 +19,6 @@ class UserRow extends React.Component {
     }
 }
 
-class TableAdvanced extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.open = this.open.bind(this);
-        this.close = this.close.bind(this);
-        this.state = {page: 1, users: [], total: 0, loading: false, showModal: false};
-    }
-
-    handleSelect(eventKey) {
-        this.load(eventKey);
-        this.setState({
-            page: eventKey
-        });
-    }
-
-    load(page) {
-        this.setState({
-            loading: true
-        });
-        this.serverRequest = $.get(this.props.url + page, function (users) {
-            this.setState({
-                users: users.items,
-                total: users.total_pages,
-                loading: false
-
-            });
-        }.bind(this));
-    }
-
-    close() {
-        this.setState({ showModal: false });
-    }
-
-    open() {
-        this.setState({ showModal: true });
-    }
-
-    componentDidMount() {
-        this.load(this.state.page);
-    }
-
-    render() {
-        let rows = this.state.users.map(
-            (user) => <UserRow user={user}/>
-        );
-
-        let spinner = null;
-        if (this.state.loading) {
-            spinner = <Spinner />;
-        }
-
-        const popover = (
-            <Popover id="modal-popover" title="popover">
-                very popover. such engagement
-            </Popover>
-        );
-        const tooltip = (
-            <Tooltip id="modal-tooltip">
-                wow.
-            </Tooltip>
-        );
-
-        return (
-            <div>
-                <Table responsive className="dataTable">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {rows}
-                    </tbody>
-                    {spinner}
-                </Table>
-
-                <Pagination
-                    prev
-                    next
-                    first
-                    last
-                    ellipsis
-                    boundaryLinks
-                    items={this.state.total}
-                    maxButtons={3}
-                    activePage={this.state.page}
-                    onSelect={this.handleSelect}/>
-
-                <br/>
-                <Button
-                    bsStyle="primary"
-                    bsSize="large"
-                    onClick={this.open}
-                >
-                    Launch demo modal
-                </Button>
-
-                <Modal show={this.state.showModal} onHide={this.close}>
-                    <ModalHeader closeButton>
-                        <ModalTitle>Modal heading</ModalTitle>
-                    </ModalHeader>
-                    <ModalBody>
-                        <h4>Text in a modal</h4>
-                        <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-
-                        <h4>Popover in a modal</h4>
-                        <p>there is a <OverlayTrigger overlay={popover}><a href="#">popover</a></OverlayTrigger> here</p>
-
-                        <h4>Tooltips in a modal</h4>
-                        <p>there is a <OverlayTrigger overlay={tooltip}><a href="#">tooltip</a></OverlayTrigger> here</p>
-
-                        <hr />
-
-                        <h4>Overflowing text to show scroll behavior</h4>
-                        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-                        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-                        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-                        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-                        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-                        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-                        <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-                        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-                        <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button onClick={this.close}>Close</Button>
-                    </ModalFooter>
-                </Modal>
-            </div>
-        )
-    }
-}
-
 const form = (
     <Form horizontal>
         <FormGroup controlId="formHorizontalEmail">
@@ -190,12 +55,125 @@ const form = (
     </Form>
 );
 
-class Form2 extends React.Component {
+const modal = (
+    <div>
+        <Button
+            bsStyle="primary"
+            bsSize="large"
+
+        >
+            Launch demo modal
+        </Button>
+
+        <Modal>
+            <ModalHeader closeButton>
+                <ModalTitle>Modal heading</ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+                {form}
+            </ModalBody>
+            <ModalFooter>
+                <Button>Close</Button>
+            </ModalFooter>
+        </Modal>
+    </div>
+);
+
+class TableAdvanced extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleSelect = this.handleSelect.bind(this);
+        /*this.open = this.open.bind(this);
+        this.close = this.close.bind(this);*/
+        this.state = {page: 1, users: [], total: 0, loading: false, showModal: false};
+        this.state = {page: 1, users: [], total: 0, loading: false};
+    }
+
+    handleSelect(eventKey) {
+        this.load(eventKey);
+        this.setState({
+            page: eventKey
+        });
+    }
+
+    load(page) {
+        this.setState({
+            loading: true
+        });
+        this.serverRequest = $.get(this.props.url + page, function (users) {
+            this.setState({
+                users: users.items,
+                total: users.total_pages,
+                loading: false
+
+            });
+        }.bind(this));
+    }
+
+    /*close() {
+        this.setState({ showModal: false });
+    }
+
+    open() {
+        this.setState({ showModal: true });
+    }*/
+
+    componentDidMount() {
+        this.load(this.state.page);
+    }
+
     render() {
+        let rows = this.state.users.map(
+            (user) => <UserRow user={user}/>
+        );
+
+        let spinner = null;
+        if (this.state.loading) {
+            spinner = <Spinner />;
+        }
+
+        /*const popover = (
+            <Popover id="modal-popover" title="popover">
+                very popover. such engagement
+            </Popover>
+        );
+        const tooltip = (
+            <Tooltip id="modal-tooltip">
+                wow.
+            </Tooltip>
+        );*/
+
         return (
             <div>
-                {form}
+                <Table responsive className="dataTable">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {rows}
+                    </tbody>
+                    {spinner}
+                </Table>
+
+                <Pagination
+                    prev
+                    next
+                    first
+                    last
+                    ellipsis
+                    boundaryLinks
+                    items={this.state.total}
+                    maxButtons={3}
+                    activePage={this.state.page}
+                    onSelect={this.handleSelect}/>
             </div>
         )
     }
+}
+
+class Ready extends React.Component {
+
 }

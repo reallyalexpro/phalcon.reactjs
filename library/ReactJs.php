@@ -29,19 +29,20 @@ class ReactJs
         $this->babelSource = $this->loadFile($this->config->babel->path);
     }
 
-    private function loadSources() {
+    public function loadSources() {
         $this->loadReactSource();
         $this->loadBabelSource();
+        return $this;
     }
 
-    private function scriptUrl($path) {
+    private function scriptUrl($path, $ext = ".js") {
         $dir = pathinfo(pathinfo($path, PATHINFO_DIRNAME), PATHINFO_FILENAME);
-        return $this->config->target->url . $dir . "/" .  pathinfo($path, PATHINFO_FILENAME) . '.js';
+        return $this->config->target->url . $dir . "/" .  pathinfo($path, PATHINFO_FILENAME) . $ext;
     }
 
-    private function scriptPath($path) {
+    private function scriptPath($path, $ext = ".js") {
         $dir = pathinfo(pathinfo($path, PATHINFO_DIRNAME), PATHINFO_FILENAME);
-        return $this->config->target->path . $dir . "/" . pathinfo($path, PATHINFO_FILENAME) . '.js';
+        return $this->config->target->path . $dir . "/" . pathinfo($path, PATHINFO_FILENAME) . $ext;
     }
 
     private function makeFolder($path) {
@@ -77,11 +78,9 @@ class ReactJs
                     $this->writeFile($scriptJS, $script);
                     $this->assets->addJs($urlJS);
                 } else {
-                    $jsxSource = $this->loadFile($scriptJSX);
-                    $this->assets->collection("footer")
-                        ->addInlineJs($jsxSource, null, ['type' => 'text/babel'])
-                        ->addFilter(new Phalcon\Assets\Filters\Jsmin());
+                    copy($scriptJSX, $this->scriptPath($scriptJSX, '.jsx'));
                     $this->assets->addJs($this->config->babel->localUrl);
+                    $this->assets->addJs($this->scriptUrl($scriptJSX, '.jsx'), null, null, ['type' => 'text/babel']);
                 }
                 break;
             case 'production':
@@ -89,11 +88,9 @@ class ReactJs
                 if (is_file($scriptJS)) {
                     $this->assets->addJs($urlJS);
                 } else {
-                    $jsxSource = $this->loadFile($scriptJSX);
-                    $this->assets->collection("footer")
-                        ->addInlineJs($jsxSource, null, ['type' => 'text/babel'])
-                        ->addFilter(new Phalcon\Assets\Filters\Jsmin());
+                    copy($scriptJSX, $this->scriptPath($scriptJSX, '.jsx'));
                     $this->assets->addJs($this->config->babel->remoteUrl);
+                    $this->assets->addJs($this->scriptUrl($scriptJSX, '.jsx'), null, null, ['type' => 'text/babel']);
                 }
                 break;
         }
@@ -119,18 +116,20 @@ class ReactJs
     }
 
     public function getMarkup($scriptJSX, $component, $data = null, $sources = "") {
-        $v8 = new \V8Js();
-        $react = [];
-        $react[] = "var console = {warn: function(){}, error: print};";
-        $react[] = "var global = global || this, self = self || this, window = window || this;";
-        $react[] = $this->reactSource;
-        $react[] = "var React = global.React, ReactDOM = global.ReactDOM, ReactDOMServer = global.ReactDOMServer;";
-        $react[] = $sources;
-        $react[] = $this->transpile($this->loadFile($scriptJSX));
-        $react[] = sprintf("var result = ReactDOMServer.renderToString(React.createElement(%s, %s)); result", $component, json_encode($data));
-        $react[] = ';';
-        $concatenated = implode(";\n", $react);
-        return $v8->executeString($concatenated);
-        //return $concatenated;
+        if ($this->v8js) {
+            $v8 = new \V8Js();
+            $react = [];
+            $react[] = "var console = {warn: function(){}, error: print};";
+            $react[] = "var global = global || this, self = self || this, window = window || this;";
+            $react[] = $this->reactSource;
+            $react[] = "var React = global.React, ReactDOM = global.ReactDOM, ReactDOMServer = global.ReactDOMServer;";
+            $react[] = $sources;
+            $react[] = $this->transpile($this->loadFile($scriptJSX));
+            $react[] = sprintf("var result = ReactDOMServer.renderToString(React.createElement(%s, %s)); result", $component, json_encode($data));
+            $react[] = ';';
+            $concatenated = implode(";\n", $react);
+            return $v8->executeString($concatenated);
+        }
+        return "";
     }
 }

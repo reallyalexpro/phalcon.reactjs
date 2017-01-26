@@ -4,8 +4,8 @@
 
 <br/><br/>
 
-<div id="form">
+<div id="table2">
 
 </div>
 
-{{ content }}
+<br/><br/>

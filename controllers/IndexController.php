@@ -16,25 +16,31 @@ class IndexController extends ControllerBase
         $this->react
             ->prepareJs($this->assets)
             ->getJs(__DIR__ . '/../views/' . $this->getPath() . '.jsx')
-            ->endJs('
-                setTimeout(function() {                
-                    ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table"));                    
-                }, 1);                        
+            ->endJs('                                
+                function render() {
+                    if (typeof Ready !== "undefined") {
+                        ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table"));
+                        ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table2"));
+                    } else {
+                        setTimeout(render, 1);
+                    }
+                }
+                setTimeout(render, 1);
             ');
 
-        $sources = [];
+        /*$sources = [];
         foreach ($this->react->config->reactBootstrap as $path) {
             $sources[] = $this->react->loadFile($path);
         }
         $concatenated = implode(";\n", $sources);
 
         $this->view->content =
-            $this->react->getMarkup(
+            $this->react->loadSources()->getMarkup(
                 __DIR__ . '/../views/' . $this->getPath() . '.jsx',
                 'Form2',
                 null,
                 $concatenated
-            );
+            );*/
     }
 
     public function getUsersAction($page)

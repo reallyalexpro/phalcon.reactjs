@@ -63,268 +63,6 @@ var UserRow = function (_React$Component2) {
     return UserRow;
 }(React.Component);
 
-var TableAdvanced = function (_React$Component3) {
-    _inherits(TableAdvanced, _React$Component3);
-
-    function TableAdvanced(props) {
-        _classCallCheck(this, TableAdvanced);
-
-        var _this3 = _possibleConstructorReturn(this, (TableAdvanced.__proto__ || Object.getPrototypeOf(TableAdvanced)).call(this, props));
-
-        _this3.handleSelect = _this3.handleSelect.bind(_this3);
-        _this3.open = _this3.open.bind(_this3);
-        _this3.close = _this3.close.bind(_this3);
-        _this3.state = { page: 1, users: [], total: 0, loading: false, showModal: false };
-        return _this3;
-    }
-
-    _createClass(TableAdvanced, [{
-        key: "handleSelect",
-        value: function handleSelect(eventKey) {
-            this.load(eventKey);
-            this.setState({
-                page: eventKey
-            });
-        }
-    }, {
-        key: "load",
-        value: function load(page) {
-            this.setState({
-                loading: true
-            });
-            this.serverRequest = $.get(this.props.url + page, function (users) {
-                this.setState({
-                    users: users.items,
-                    total: users.total_pages,
-                    loading: false
-
-                });
-            }.bind(this));
-        }
-    }, {
-        key: "close",
-        value: function close() {
-            this.setState({ showModal: false });
-        }
-    }, {
-        key: "open",
-        value: function open() {
-            this.setState({ showModal: true });
-        }
-    }, {
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            this.load(this.state.page);
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            var rows = this.state.users.map(function (user) {
-                return React.createElement(UserRow, { user: user });
-            });
-
-            var spinner = null;
-            if (this.state.loading) {
-                spinner = React.createElement(Spinner, null);
-            }
-
-            var popover = React.createElement(
-                Popover,
-                { id: "modal-popover", title: "popover" },
-                "very popover. such engagement"
-            );
-            var tooltip = React.createElement(
-                Tooltip,
-                { id: "modal-tooltip" },
-                "wow."
-            );
-
-            return React.createElement(
-                "div",
-                null,
-                React.createElement(
-                    Table,
-                    { responsive: true, className: "dataTable" },
-                    React.createElement(
-                        "thead",
-                        null,
-                        React.createElement(
-                            "tr",
-                            null,
-                            React.createElement(
-                                "th",
-                                null,
-                                "#"
-                            ),
-                            React.createElement(
-                                "th",
-                                null,
-                                "Username"
-                            )
-                        )
-                    ),
-                    React.createElement(
-                        "tbody",
-                        null,
-                        rows
-                    ),
-                    spinner
-                ),
-                React.createElement(Pagination, {
-                    prev: true,
-                    next: true,
-                    first: true,
-                    last: true,
-                    ellipsis: true,
-                    boundaryLinks: true,
-                    items: this.state.total,
-                    maxButtons: 3,
-                    activePage: this.state.page,
-                    onSelect: this.handleSelect }),
-                React.createElement("br", null),
-                React.createElement(
-                    Button,
-                    {
-                        bsStyle: "primary",
-                        bsSize: "large",
-                        onClick: this.open
-                    },
-                    "Launch demo modal"
-                ),
-                React.createElement(
-                    Modal,
-                    { show: this.state.showModal, onHide: this.close },
-                    React.createElement(
-                        ModalHeader,
-                        { closeButton: true },
-                        React.createElement(
-                            ModalTitle,
-                            null,
-                            "Modal heading"
-                        )
-                    ),
-                    React.createElement(
-                        ModalBody,
-                        null,
-                        React.createElement(
-                            "h4",
-                            null,
-                            "Text in a modal"
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Duis mollis, est non commodo luctus, nisi erat porttitor ligula."
-                        ),
-                        React.createElement(
-                            "h4",
-                            null,
-                            "Popover in a modal"
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "there is a ",
-                            React.createElement(
-                                OverlayTrigger,
-                                { overlay: popover },
-                                React.createElement(
-                                    "a",
-                                    { href: "#" },
-                                    "popover"
-                                )
-                            ),
-                            " here"
-                        ),
-                        React.createElement(
-                            "h4",
-                            null,
-                            "Tooltips in a modal"
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "there is a ",
-                            React.createElement(
-                                OverlayTrigger,
-                                { overlay: tooltip },
-                                React.createElement(
-                                    "a",
-                                    { href: "#" },
-                                    "tooltip"
-                                )
-                            ),
-                            " here"
-                        ),
-                        React.createElement("hr", null),
-                        React.createElement(
-                            "h4",
-                            null,
-                            "Overflowing text to show scroll behavior"
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
-                        ),
-                        React.createElement(
-                            "p",
-                            null,
-                            "Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla."
-                        )
-                    ),
-                    React.createElement(
-                        ModalFooter,
-                        null,
-                        React.createElement(
-                            Button,
-                            { onClick: this.close },
-                            "Close"
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return TableAdvanced;
-}(React.Component);
-
 var form = React.createElement(
     Form,
     { horizontal: true },
@@ -384,25 +122,179 @@ var form = React.createElement(
     )
 );
 
-var Form2 = function (_React$Component4) {
-    _inherits(Form2, _React$Component4);
+var modal = React.createElement(
+    "div",
+    null,
+    React.createElement(
+        Button,
+        {
+            bsStyle: "primary",
+            bsSize: "large"
 
-    function Form2() {
-        _classCallCheck(this, Form2);
+        },
+        "Launch demo modal"
+    ),
+    React.createElement(
+        Modal,
+        null,
+        React.createElement(
+            ModalHeader,
+            { closeButton: true },
+            React.createElement(
+                ModalTitle,
+                null,
+                "Modal heading"
+            )
+        ),
+        React.createElement(
+            ModalBody,
+            null,
+            form
+        ),
+        React.createElement(
+            ModalFooter,
+            null,
+            React.createElement(
+                Button,
+                null,
+                "Close"
+            )
+        )
+    )
+);
 
-        return _possibleConstructorReturn(this, (Form2.__proto__ || Object.getPrototypeOf(Form2)).apply(this, arguments));
+var TableAdvanced = function (_React$Component3) {
+    _inherits(TableAdvanced, _React$Component3);
+
+    function TableAdvanced(props) {
+        _classCallCheck(this, TableAdvanced);
+
+        var _this3 = _possibleConstructorReturn(this, (TableAdvanced.__proto__ || Object.getPrototypeOf(TableAdvanced)).call(this, props));
+
+        _this3.handleSelect = _this3.handleSelect.bind(_this3);
+        /*this.open = this.open.bind(this);
+        this.close = this.close.bind(this);*/
+        _this3.state = { page: 1, users: [], total: 0, loading: false, showModal: false };
+        _this3.state = { page: 1, users: [], total: 0, loading: false };
+        return _this3;
     }
 
-    _createClass(Form2, [{
+    _createClass(TableAdvanced, [{
+        key: "handleSelect",
+        value: function handleSelect(eventKey) {
+            this.load(eventKey);
+            this.setState({
+                page: eventKey
+            });
+        }
+    }, {
+        key: "load",
+        value: function load(page) {
+            this.setState({
+                loading: true
+            });
+            this.serverRequest = $.get(this.props.url + page, function (users) {
+                this.setState({
+                    users: users.items,
+                    total: users.total_pages,
+                    loading: false
+
+                });
+            }.bind(this));
+        }
+
+        /*close() {
+            this.setState({ showModal: false });
+        }
+         open() {
+            this.setState({ showModal: true });
+        }*/
+
+    }, {
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            this.load(this.state.page);
+        }
+    }, {
         key: "render",
         value: function render() {
+            var rows = this.state.users.map(function (user) {
+                return React.createElement(UserRow, { user: user });
+            });
+
+            var spinner = null;
+            if (this.state.loading) {
+                spinner = React.createElement(Spinner, null);
+            }
+
+            /*const popover = (
+                <Popover id="modal-popover" title="popover">
+                    very popover. such engagement
+                </Popover>
+            );
+            const tooltip = (
+                <Tooltip id="modal-tooltip">
+                    wow.
+                </Tooltip>
+            );*/
+
             return React.createElement(
                 "div",
                 null,
-                form
+                React.createElement(
+                    Table,
+                    { responsive: true, className: "dataTable" },
+                    React.createElement(
+                        "thead",
+                        null,
+                        React.createElement(
+                            "tr",
+                            null,
+                            React.createElement(
+                                "th",
+                                null,
+                                "#"
+                            ),
+                            React.createElement(
+                                "th",
+                                null,
+                                "Username"
+                            )
+                        )
+                    ),
+                    React.createElement(
+                        "tbody",
+                        null,
+                        rows
+                    ),
+                    spinner
+                ),
+                React.createElement(Pagination, {
+                    prev: true,
+                    next: true,
+                    first: true,
+                    last: true,
+                    ellipsis: true,
+                    boundaryLinks: true,
+                    items: this.state.total,
+                    maxButtons: 3,
+                    activePage: this.state.page,
+                    onSelect: this.handleSelect })
             );
         }
     }]);
 
-    return Form2;
+    return TableAdvanced;
+}(React.Component);
+
+var Ready = function (_React$Component4) {
+    _inherits(Ready, _React$Component4);
+
+    function Ready() {
+        _classCallCheck(this, Ready);
+
+        return _possibleConstructorReturn(this, (Ready.__proto__ || Object.getPrototypeOf(Ready)).apply(this, arguments));
+    }
+
+    return Ready;
 }(React.Component);
