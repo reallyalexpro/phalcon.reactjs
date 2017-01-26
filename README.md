@@ -1,5 +1,5 @@
 # phalcon.reactjs
-Sample Phalcon project with ReactJs support.
+Sample Phalcon project with ReactJs support. Based on <a href="https://github.com/reactjs/react-php-v8js">React-PHP-V8Js</a>.
 
 It has 2 modes: development and production.
 Uses V8Js (optional) for JSX transpiling on the fly in development mode. 
