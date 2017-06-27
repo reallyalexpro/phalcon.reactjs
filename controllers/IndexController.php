@@ -13,14 +13,18 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
+        $data = new stdClass();
+        $data->users = Users::find(['order' => 'created desc'])->toArray();
+        $data->url = "/index/getusers/";
+        
         $this->react
             ->prepareJs($this->assets)
             ->getJs(__DIR__ . '/../views/' . $this->getPath() . '.jsx')
-            ->endJs('                                
+            ->endJs('
                 function render() {
                     if (typeof Ready !== "undefined") {
-                        ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table"));
-                        ReactDOM.render(React.createElement(TableAdvanced, { url: "/index/getusers/" }), document.getElementById("table2"));
+                        ReactDOM.render(React.createElement(TableAdvanced, { users: '. json_encode($data->users) .', url: "/index/getusers/" }), document.getElementById("table"));
+                        ReactDOM.render(React.createElement(TableAdvanced, { users: '. json_encode($data->users) .', url: "/index/getusers/" }), document.getElementById("table2"));
                     } else {
                         setTimeout(render, 1);
                     }
@@ -33,12 +37,11 @@ class IndexController extends ControllerBase
             $sources[] = $this->react->loadFile($path);
         }
         $concatenated = implode(";\n", $sources);
-
         $this->view->content =
             $this->react->loadSources()->getMarkup(
                 __DIR__ . '/../views/' . $this->getPath() . '.jsx',
-                'Form2',
-                null,
+                'TableAdvanced',
+                $data,
                 $concatenated
             );*/
     }
