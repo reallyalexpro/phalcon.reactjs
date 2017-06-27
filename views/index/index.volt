@@ -1,11 +1,7 @@
-<div id="table">
-
-</div>
+<div id="table">{% if content is defined %}{{content}}{% endif %}</div>
 
 <br/><br/>
 
-<div id="table2">
-
-</div>
+<div id="table2">{% if content is defined %}{{content}}{% endif %}</div>
 
 <br/><br/>

@@ -174,8 +174,15 @@ var TableAdvanced = function (_React$Component3) {
         _this3.handleSelect = _this3.handleSelect.bind(_this3);
         /*this.open = this.open.bind(this);
         this.close = this.close.bind(this);*/
-        _this3.state = { page: 1, users: [], total: 0, loading: false, showModal: false };
-        _this3.state = { page: 1, users: [], total: 0, loading: false };
+
+        var users = props.users ? props.users : [];
+        if (users) {
+            var totalPages = Math.round(users.length / 4);
+            users = users.slice(0, 4);
+            _this3.state = { page: 1, users: users, total: totalPages, loading: false };
+        } else {
+            _this3.state = { page: 1, loading: true };
+        }
         return _this3;
     }
 
@@ -219,12 +226,12 @@ var TableAdvanced = function (_React$Component3) {
         key: "render",
         value: function render() {
             var rows = this.state.users.map(function (user) {
-                return React.createElement(UserRow, { user: user });
+                return React.createElement(UserRow, { user: user, key: user.id });
             });
 
             var spinner = null;
             if (this.state.loading) {
-                spinner = React.createElement(Spinner, null);
+                spinner = React.createElement(Spinner, { key: "spinner" });
             }
 
             /*const popover = (
@@ -243,7 +250,7 @@ var TableAdvanced = function (_React$Component3) {
                 null,
                 React.createElement(
                     Table,
-                    { responsive: true, className: "dataTable" },
+                    { responsive: true, className: "dataTable", key: "dataTable" },
                     React.createElement(
                         "thead",
                         null,
@@ -269,7 +276,7 @@ var TableAdvanced = function (_React$Component3) {
                     ),
                     spinner
                 ),
-                React.createElement(Pagination, {
+                React.createElement(Pagination, { key: "Pagination",
                     prev: true,
                     next: true,
                     first: true,

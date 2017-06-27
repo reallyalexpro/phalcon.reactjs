@@ -85,8 +85,15 @@ class TableAdvanced extends React.Component {
         this.handleSelect = this.handleSelect.bind(this);
         /*this.open = this.open.bind(this);
         this.close = this.close.bind(this);*/
-        this.state = {page: 1, users: [], total: 0, loading: false, showModal: false};
-        this.state = {page: 1, users: [], total: 0, loading: false};
+        
+        var users = props.users ? props.users : [];
+        if(users) {
+            var totalPages = Math.round(users.length / 4);
+            users = users.slice(0, 4);
+            this.state = {page: 1, users: users, total: totalPages, loading: false};
+        } else {
+            this.state = {page: 1, loading: true}
+        }
     }
 
     handleSelect(eventKey) {
@@ -124,12 +131,12 @@ class TableAdvanced extends React.Component {
 
     render() {
         let rows = this.state.users.map(
-            (user) => <UserRow user={user}/>
+            (user) => <UserRow user={user} key={user.id} />
         );
 
         let spinner = null;
         if (this.state.loading) {
-            spinner = <Spinner />;
+            spinner = <Spinner key="spinner" />;
         }
 
         /*const popover = (
@@ -145,7 +152,7 @@ class TableAdvanced extends React.Component {
 
         return (
             <div>
-                <Table responsive className="dataTable">
+                <Table responsive className="dataTable" key="dataTable">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -158,7 +165,7 @@ class TableAdvanced extends React.Component {
                     {spinner}
                 </Table>
 
-                <Pagination
+                <Pagination key="Pagination"
                     prev
                     next
                     first
